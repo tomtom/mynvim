@@ -1,0 +1,145 @@
+vim.opt.rtp:prepend(vim.fn.expand("~/.vim"))
+vim.opt.rtp:append(vim.fn.expand("~/.vim/after"))
+vim.opt.packpath = vim.opt.rtp:get()
+
+vim.opt.clipboard = "unnamedplus"
+vim.opt.foldlevel = 4
+vim.opt.foldmethod = "marker"
+vim.opt.formatoptions:append({ r = true, w = true })
+vim.opt.guifont = "Fira Code:h12"
+vim.opt.linespace = 4
+vim.opt.title = true
+vim.opt.titlestring = "%{expand('%:p')} %m"
+
+vim.g.mapleader      = '#'
+vim.g.maplocalleader = '+'
+vim.g.myhostname = vim.fn.toupper(vim.fn.hostname())
+vim.g.tvimfiles = vim.fn.stdpath('config')
+vim.g.tlib_persistent = vim.g.tvimfiles .. '/share_' .. vim.g.myhostname
+vim.g.tvimcacheroot = vim.g.tvimfiles .. '/cache_' .. vim.g.myhostname
+vim.g.tvimcachedir = vim.g.tvimcacheroot .. '/vim/'
+vim.g.tlib_cache = vim.g.tvimcacheroot
+
+-- vim.opt.autocomplete = true
+
+-- Source your existing .vimrc
+-- vim.cmd("source ~/.vimrc")
+vim.cmd("colorscheme tmlDarkOcean")
+
+vim.pack.add({
+    "https://github.com/nvim-tree/nvim-web-devicons",
+    "https://github.com/neovim/nvim-lspconfig",
+    "https://github.com/ibhagwan/fzf-lua",
+    "https://github.com/avifenesh/claucode.nvim",
+    -- R
+    "https://github.com/R-nvim/R.nvim",
+})
+
+-- require("codecompanion").setup({
+--   opts = {
+--     log_level = "DEBUG", -- or "TRACE"
+--   }
+-- })
+
+-- require("claucode").setup()
+
+require("autopack").register_all({
+
+    {
+        name = "tselectbuffer_vim",
+        commands = { "TSelectBuffer" },
+    },
+
+    {
+        name = "tcomment_vim",
+        keys = { "gc", "<c-_>" },
+    },
+
+    {
+        name = "tfiles_vim",
+        commands = { "Tfiles" },
+    },
+
+    -- Automap tinykeymap_vim nmap <Leader>m
+    -- Automap tinykeymap_vim nmap M
+    -- Automap tinykeymap_vim nmap gt
+    -- Autocommand tinykeymap_vim Tinykeymap TinykeymapsInfo
+    -- " para_move
+    -- Automap tinykeymap_vim nmap gp
+    {
+        name = "tinykeymap_vim",
+        keys = { "<leader>m", "M", "gt", "gp", },
+        commands = { "Tinykeymap", "TinykeymapsInfo" },
+    },
+
+    -- Autocommand trag_vim Trag Tragcw Traglw
+    -- Automap trag_vim nnoremap <Leader>rr :Trag <c-r><c-w> **<cr>
+    -- Automap trag_vim nnoremap <Leader>rw :Trag --workspace=? <c-r><c-w><cr>
+    -- Automap trag_vim nnoremap <Leader>r<space> :Trag 
+    -- Automap trag_vim nnoremap <Leader>rf :Tragfiles<cr>
+    -- Automap trag_vim nnoremap <Leader>rq :Tragcw<cr>
+    -- Automap trag_vim nnoremap <Leader>rl :Traglw<cr>
+    {
+        name = "trag_vim",
+        keys = { "<leader>rr", "<leader>rw", "<leader>r<space>", "<leader>rf", "<leader>rq", "<leader>rl", },
+        commands = { "Trag", "Tragcw", "Traglw", },
+    },
+
+})
+
+
+-- Copy (visual mode)
+vim.keymap.set("v", "<C-c>", '"+y', { desc = "Copy to clipboard" })
+
+-- Cut (visual mode)
+vim.keymap.set("v", "<C-x>", '"+d', { desc = "Cut to clipboard" })
+-- Paste
+vim.keymap.set('n', '<c-q>', '<c-v>', { desc = 'Blockwise visual' })
+vim.keymap.set("n", "<C-v>", '"+p',      { desc = "Paste from clipboard" })
+vim.keymap.set("i", "<C-v>", "<C-r>+",   { desc = "Paste from clipboard" })
+vim.keymap.set("c", "<C-v>", "<C-r>+",   { desc = "Paste from clipboard" })
+vim.keymap.set("t", "<C-v>", '<C-\\><C-n>"+pi', { desc = "Paste in terminal" })
+-- Select-all (bonus, Ctrl-A)
+vim.keymap.set("n", "<C-a>", "ggVG", { desc = "Select all" })
+
+vim.keymap.set('n', '<c-z>', 'u', { desc = 'Undo' })
+vim.keymap.set('n', '<c-s>', '<cmd>update<cr>', { desc = 'Save' })
+vim.keymap.set('n', '<leader><c-s>', '<cmd>wa<cr>', { desc = 'Save all' })
+vim.keymap.set('x', 'ß', '<cmd>sort i<cr>', { desc = 'Save all' })
+
+-- call TMultiMap("*I", "noremap", "<C-BS>",  "<S-C-Left><Del>")
+vim.keymap.set('i', '<c-bs>', '<S-C-Left><Del>', { desc = 'Save previous word' })
+-- call TMultiMap("*I", "noremap", "<C-Del>", "<S-C-Right><Del>")
+vim.keymap.set('i', '<c-del>', '<S-C-Right><Del>', { desc = 'Save next word' })
+-- noremap Q @q
+-- call TMultiMap("ni", "noremap <silent>", "<m-w>", ":call tml#FormatParagraph('}', 'ap', 'gw')<cr>")
+-- call TMultiMap("ni", "noremap <silent>", "<m-q>", ":call tml#FormatParagraph('}', 'ap')<cr>")
+-- call TMultiMap("v", "noremap <silent>", "<m-q>", ":'<,'>-1s/ *$/ /ge<cr>", '`<gqap')
+-- vnoremap <Leader>q :TUnwrap<cr>
+-- call TMultiMap("ni", "map", "<m-c>", "~l", "l", "guw", "w")
+-- call TMultiMap("ni", "map", "<leader><m-c>", "m`", "b", "~l", "``")
+-- nnoremap <M-%> :%s/<c-r><c-w>//gc<Left><Left><Left>
+-- vnoremap <M-%> ""y:%s/<c-r>"//gc<Left><Left><Left>
+-- nnoremap <C-F4> :Kwbd<cr>
+-- nnoremap <c-w><c-w> :bdelete<cr>
+
+
+-- vim.keymap.set('n', '<M-r>', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Recent Files' })
+-- vim.keymap.set('n', '<M-b>', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
+vim.keymap.set('n', '<M-r>', '<cmd>Tmru<cr>', { desc = 'Recent files' })
+-- call TMultiMap("n", "noremap", "<s-m-r>",    ':Tmrusession! ')
+-- call TMultiMap("n", "noremap", "<Leader>mru",    ':Tmru<cr>')
+
+vim.keymap.set('n', '<M-b>', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
+vim.keymap.set('n', '<S-M-b>', '<cmd>TSelectBuffer!<cr>', { desc = 'Switch buffers' })
+vim.keymap.set('n', '<leader>b', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
+vim.keymap.set('n', '<leader>B', '<cmd>TSelectBuffer!<cr>', { desc = 'Switch buffers' })
+
+vim.keymap.set('n', '<leader>ff', '<cmd>Tfiles<cr>', { desc = 'Show files' })
+vim.keymap.set('n', '<leader>f.', '<cmd>Tfiles --glob=*<cr>', { desc = 'Show files' })
+vim.keymap.set('n', '<leader>FF', '<cmd>Tfiles!<cr>', { desc = 'Show files' })
+vim.keymap.set('n', '<leader>F:', '<cmd>Tfiles! --glob=*<cr>', { desc = 'Show files' })
+
+vim.keymap.set('n', '<leader>ap', '<cmd>Autoprojectselect<cr>', { desc = 'Select project' })
+vim.keymap.set('n', '<leader>AP', '<cmd>Autoprojectselect!<cr>', { desc = 'Select project' })
+
