@@ -1,4 +1,6 @@
 00archiv/
+cache/
 cache_*/
+share/
 share_*/
 nvim-pack-lock.json
