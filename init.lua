@@ -1,15 +1,34 @@
 vim.opt.rtp:prepend(vim.fn.expand("~/.vim"))
 vim.opt.rtp:append(vim.fn.expand("~/.vim/after"))
-vim.opt.packpath = vim.opt.rtp:get()
+-- vim.opt.packpath = vim.opt.rtp:get()
 
+vim.opt.autoread = true
 vim.opt.clipboard = "unnamedplus"
+vim.opt.conceallevel = 2
+vim.opt.cpoptions:append({ m = true, y = true, M = false })
+vim.opt.expandtab = true
 vim.opt.foldlevel = 4
 vim.opt.foldmethod = "marker"
 vim.opt.formatoptions:append({ r = true, w = true })
 vim.opt.guifont = "Fira Code:h12"
+vim.opt.ignorecase = true
+vim.opt.infercase = true
+vim.opt.joinspaces = false
 vim.opt.linespace = 4
+vim.opt.shiftwidth = 4
+vim.opt.showbreak = "| "
+vim.opt.showmatch = true
+vim.opt.smartcase = true
+vim.opt.smarttab = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.tabstop = 4
+vim.opt.tagcase = "match"
+vim.opt.tags = "./tags;tags"
+vim.opt.textwidth = 72
 vim.opt.title = true
 vim.opt.titlestring = "%{expand('%:p')} %m"
+vim.opt.wildmode="longest:full,full"
 
 vim.g.mapleader      = '#'
 vim.g.maplocalleader = '+'
@@ -26,14 +45,14 @@ vim.g.tlib_cache = vim.g.tvimcacheroot
 -- vim.cmd("source ~/.vimrc")
 vim.cmd("colorscheme tmlDarkOcean")
 
-vim.pack.add({
-    "https://github.com/nvim-tree/nvim-web-devicons",
-    "https://github.com/neovim/nvim-lspconfig",
-    "https://github.com/ibhagwan/fzf-lua",
-    "https://github.com/avifenesh/claucode.nvim",
-    -- R
-    "https://github.com/R-nvim/R.nvim",
-})
+-- vim.pack.add({
+--     "https://github.com/nvim-tree/nvim-web-devicons",
+--     "https://github.com/neovim/nvim-lspconfig",
+--     "https://github.com/ibhagwan/fzf-lua",
+--     "https://github.com/avifenesh/claucode.nvim",
+--     -- R
+--     "https://github.com/R-nvim/R.nvim",
+-- })
 
 -- require("codecompanion").setup({
 --   opts = {
@@ -43,7 +62,25 @@ vim.pack.add({
 
 -- require("claucode").setup()
 
-require("autopack").register_all({
+require("autopack").register({
+
+	{ spec = "https://github.com/neovim/nvim-lspconfig", },
+
+    -- { spec = "https://github.com/nvim-tree/nvim-web-devicons" },
+    "https://github.com/nvim-tree/nvim-web-devicons",
+    {
+        spec = "https://github.com/ibhagwan/fzf-lua", 
+        dependencies = { "nvim-web-devicons", },
+        commands = { "FzfLua", },
+    },
+
+	{ spec = "https://github.com/avifenesh/claucode.nvim", },
+
+	-- R
+	{ 
+        spec = "https://github.com/R-nvim/R.nvim", 
+        patterns = { "*.R", "*.r", "*.rmd", "*.Rmd", },
+    },
 
     {
         name = "tselectbuffer_vim",
@@ -69,7 +106,7 @@ require("autopack").register_all({
     {
         name = "tinykeymap_vim",
         keys = { "<leader>m", "M", "gt", "gp", },
-        commands = { "Tinykeymap", "TinykeymapsInfo" },
+        commands = { "Tinykeymap", "TinykeymapsInfo", },
     },
 
     -- Autocommand trag_vim Trag Tragcw Traglw
@@ -108,9 +145,22 @@ vim.keymap.set('n', '<leader><c-s>', '<cmd>wa<cr>', { desc = 'Save all' })
 vim.keymap.set('x', 'ß', '<cmd>sort i<cr>', { desc = 'Save all' })
 
 -- call TMultiMap("*I", "noremap", "<C-BS>",  "<S-C-Left><Del>")
-vim.keymap.set('i', '<c-bs>', '<S-C-Left><Del>', { desc = 'Save previous word' })
+-- vim.keymap.set('i', '<c-bs>', '<S-C-Left><Del>', { desc = 'Save previous word' })
+vim.keymap.set("i", "<C-BS>", "<C-w>", { noremap = true, silent = true })
+vim.keymap.set("c", "<C-BS>", "<C-w>", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-BS>", "dw", { silent = true, desc = 'Delete word forward' })
+-- If <C-BS> is not recognized, your terminal may be sending <C-H>. In that case, map <C-H> instead:
+-- vim.keymap.set("i", "<C-H>", "<C-w>", { noremap = true, silent = true })   
+
 -- call TMultiMap("*I", "noremap", "<C-Del>", "<S-C-Right><Del>")
-vim.keymap.set('i', '<c-del>', '<S-C-Right><Del>', { desc = 'Save next word' })
+-- vim.keymap.set('i', '<c-del>', '<S-C-Right><Del>', { desc = 'Save next word' })
+vim.keymap.set("n", "<C-Del>", "de", { silent = true, desc = "Delete word forward" })
+vim.keymap.set("v", "<C-Del>", "de", { silent = true, desc = "Delete word forward" })
+vim.keymap.set("i", "<C-Del>", "<C-O>dw", { silent = true, desc = "Delete word forward" })   
+-- If <C-Del> does not work in Insert mode due to terminal limitations
+-- Remap Ctrl+Backspace (often more reliable than Del in terminals)
+-- vim.keymap.set("i", "<C-BS>", "<C-O>dw", { silent = true, desc = "Delete word forward in insert" })   
+
 -- noremap Q @q
 -- call TMultiMap("ni", "noremap <silent>", "<m-w>", ":call tml#FormatParagraph('}', 'ap', 'gw')<cr>")
 -- call TMultiMap("ni", "noremap <silent>", "<m-q>", ":call tml#FormatParagraph('}', 'ap')<cr>")
@@ -124,8 +174,10 @@ vim.keymap.set('i', '<c-del>', '<S-C-Right><Del>', { desc = 'Save next word' })
 -- nnoremap <c-w><c-w> :bdelete<cr>
 
 
--- vim.keymap.set('n', '<M-r>', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Recent Files' })
--- vim.keymap.set('n', '<M-b>', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
+vim.keymap.set('n', '<leader>zr', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Recent Files' })
+vim.keymap.set('n', '<leader>zb', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
+vim.keymap.set('n', '<leader>zf', '<cmd>FzfLua files<cr>', { desc = 'Fzf Files' })
+
 vim.keymap.set('n', '<M-r>', '<cmd>Tmru<cr>', { desc = 'Recent files' })
 -- call TMultiMap("n", "noremap", "<s-m-r>",    ':Tmrusession! ')
 -- call TMultiMap("n", "noremap", "<Leader>mru",    ':Tmru<cr>')
