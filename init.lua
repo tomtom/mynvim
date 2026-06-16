@@ -45,23 +45,6 @@ vim.g.tlib_cache = vim.g.tvimcacheroot
 -- vim.cmd("source ~/.vimrc")
 vim.cmd("colorscheme tmlDarkOcean")
 
--- vim.pack.add({
---     "https://github.com/nvim-tree/nvim-web-devicons",
---     "https://github.com/neovim/nvim-lspconfig",
---     "https://github.com/ibhagwan/fzf-lua",
---     "https://github.com/avifenesh/claucode.nvim",
---     -- R
---     "https://github.com/R-nvim/R.nvim",
--- })
-
--- require("codecompanion").setup({
---   opts = {
---     log_level = "DEBUG", -- or "TRACE"
---   }
--- })
-
--- require("claucode").setup()
-
 require("autopack").register({
 
 	{ spec = "https://github.com/neovim/nvim-lspconfig", },
@@ -97,25 +80,12 @@ require("autopack").register({
         commands = { "Tfiles" },
     },
 
-    -- Automap tinykeymap_vim nmap <Leader>m
-    -- Automap tinykeymap_vim nmap M
-    -- Automap tinykeymap_vim nmap gt
-    -- Autocommand tinykeymap_vim Tinykeymap TinykeymapsInfo
-    -- " para_move
-    -- Automap tinykeymap_vim nmap gp
     {
         name = "tinykeymap_vim",
         keys = { "<leader>m", "M", "gt", "gp", },
         commands = { "Tinykeymap", "TinykeymapsInfo", },
     },
 
-    -- Autocommand trag_vim Trag Tragcw Traglw
-    -- Automap trag_vim nnoremap <Leader>rr :Trag <c-r><c-w> **<cr>
-    -- Automap trag_vim nnoremap <Leader>rw :Trag --workspace=? <c-r><c-w><cr>
-    -- Automap trag_vim nnoremap <Leader>r<space> :Trag 
-    -- Automap trag_vim nnoremap <Leader>rf :Tragfiles<cr>
-    -- Automap trag_vim nnoremap <Leader>rq :Tragcw<cr>
-    -- Automap trag_vim nnoremap <Leader>rl :Traglw<cr>
     {
         name = "trag_vim",
         keys = { "<leader>rr", "<leader>rw", "<leader>r<space>", "<leader>rf", "<leader>rq", "<leader>rl", },
@@ -172,7 +142,6 @@ vim.keymap.set("i", "<C-Del>", "<C-O>dw", { silent = true, desc = "Delete word f
 -- vnoremap <M-%> ""y:%s/<c-r>"//gc<Left><Left><Left>
 -- nnoremap <C-F4> :Kwbd<cr>
 -- nnoremap <c-w><c-w> :bdelete<cr>
-
 
 vim.keymap.set('n', '<leader>zr', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Recent Files' })
 vim.keymap.set('n', '<leader>zb', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
