@@ -2,8 +2,9 @@ vim.opt.rtp:prepend(vim.fn.expand("~/.vim"))
 vim.opt.rtp:append(vim.fn.expand("~/.vim/after"))
 -- vim.opt.packpath = vim.opt.rtp:get()
 
+-- vim.opt.autocomplete = true
+-- vim.opt.clipboard = "unnamedplus"
 vim.opt.autoread = true
-vim.opt.clipboard = "unnamedplus"
 vim.opt.conceallevel = 2
 vim.opt.cpoptions:append({ m = true, y = true, M = false })
 vim.opt.expandtab = true
@@ -16,6 +17,7 @@ vim.opt.infercase = true
 vim.opt.joinspaces = false
 vim.opt.linespace = 4
 vim.opt.shiftwidth = 4
+vim.opt.shortmess:append("I")
 vim.opt.showbreak = "| "
 vim.opt.showmatch = true
 vim.opt.smartcase = true
@@ -39,17 +41,47 @@ vim.g.tvimcacheroot = vim.g.tvimfiles .. '/cache_' .. vim.g.myhostname
 vim.g.tvimcachedir = vim.g.tvimcacheroot .. '/vim/'
 vim.g.tlib_cache = vim.g.tvimcacheroot
 
--- vim.opt.autocomplete = true
+local aug = vim.api.nvim_create_augroup("AutoRead", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
+  group = aug,
+  command = "if mode() != 'c' | checktime | endif",
+  pattern = { "*" }
+})
 
 -- Source your existing .vimrc
 -- vim.cmd("source ~/.vimrc")
 vim.cmd("colorscheme tmlDarkOcean")
 
-require("autopack").register({
+require("autopack").setup({
 
 	{ spec = "https://github.com/neovim/nvim-lspconfig", },
 
-    -- { spec = "https://github.com/nvim-tree/nvim-web-devicons" },
+    {
+        spec = {src = "https://github.com/nvim-mini/mini.nvim", version = "stable" },
+        submodules = {
+            ["mini.cursorword"] = { startup = true, setup = true, },
+            ["mini.indentscope"] = { startup = true, setup = true, },
+            ["mini.pairs"] = { startup = true, setup = true, },
+            ["mini.statusline"] = { startup = true, setup = true, },
+            ["mini.hipatterns"] = {
+                startup = true,
+                setup = function(hipatterns)
+                    hipatterns.setup({
+                        highlighters = {
+                            -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+                            fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+                            hack  = { pattern = '%f[%w]()HACK()%f[%W]',  group = 'MiniHipatternsHack'  },
+                            todo  = { pattern = '%f[%w]()TODO()%f[%W]',  group = 'MiniHipatternsTodo'  },
+                            note  = { pattern = '%f[%w]()NOTE()%f[%W]',  group = 'MiniHipatternsNote'  },
+                            -- Highlight hex color strings (`#rrggbb`) using that color
+                            hex_color = hipatterns.gen_highlighter.hex_color(),
+                        },
+                    })
+                end,
+            },
+        },
+    },
+
     "https://github.com/nvim-tree/nvim-web-devicons",
     {
         spec = "https://github.com/ibhagwan/fzf-lua", 
@@ -57,7 +89,7 @@ require("autopack").register({
         commands = { "FzfLua", },
     },
 
-	{ spec = "https://github.com/avifenesh/claucode.nvim", },
+	-- { spec = "https://github.com/avifenesh/claucode.nvim", },
 
 	-- R
 	{ 
@@ -112,7 +144,14 @@ vim.keymap.set("n", "<C-a>", "ggVG", { desc = "Select all" })
 vim.keymap.set('n', '<c-z>', 'u', { desc = 'Undo' })
 vim.keymap.set('n', '<c-s>', '<cmd>update<cr>', { desc = 'Save' })
 vim.keymap.set('n', '<leader><c-s>', '<cmd>wa<cr>', { desc = 'Save all' })
-vim.keymap.set('x', 'ß', '<cmd>sort i<cr>', { desc = 'Save all' })
+-- vim.keymap.set('x', 'ß', '<cmd>sort i<cr>', { desc = 'Save all' })
+vim.keymap.set("x", "ß", ":sort i<CR>", { silent = true })
+vim.keymap.set("n", "ß", "vip:'<,'>sort i<CR>", { silent = true })
+
+
+-- call TMultiMap("ni", "map", "<m-c>", "~l", "l", "guw", "w")
+vim.keymap.set('n', '<m-c>', 'gUlw', { desc = 'Capitalize' })
+vim.keymap.set('i', '<m-c>', '<Esc>gUlwi', { desc = 'Capitalize' })
 
 -- call TMultiMap("*I", "noremap", "<C-BS>",  "<S-C-Left><Del>")
 -- vim.keymap.set('i', '<c-bs>', '<S-C-Left><Del>', { desc = 'Save previous word' })
