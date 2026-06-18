@@ -30,6 +30,7 @@ vim.opt.tags = "./tags;tags"
 vim.opt.textwidth = 72
 vim.opt.title = true
 vim.opt.titlestring = "%{expand('%:p')} %m"
+vim.opt.whichwrap:append("<,>,[,],h,l")
 vim.opt.wildmode="longest:full,full"
 
 vim.g.mapleader      = '#'
@@ -51,18 +52,43 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
 -- Source your existing .vimrc
 -- vim.cmd("source ~/.vimrc")
 vim.cmd("colorscheme tmlDarkOcean")
+vim.cmd("packadd myvimrc")
+
+require("autodir")
+-- require("tml")
 
 require("autopack").setup({
 
+    -- debug = true,
+
 	{ spec = "https://github.com/neovim/nvim-lspconfig", },
 
+	{ spec = "https://github.com/rafamadriz/friendly-snippets", },
+
     {
-        spec = {src = "https://github.com/nvim-mini/mini.nvim", version = "stable" },
+        spec = { src = "https://github.com/nvim-mini/mini.nvim", version = "stable" },
         submodules = {
             ["mini.cursorword"] = { startup = true, setup = true, },
             ["mini.indentscope"] = { startup = true, setup = true, },
-            ["mini.pairs"] = { startup = true, setup = true, },
+            -- ["mini.pairs"] = { startup = true, setup = true, },
             ["mini.statusline"] = { startup = true, setup = true, },
+            ["mini.snippets"] = {
+                imaps = { "<c-j>", },
+                dependencies = { "friendly-snippets", },
+                setup = function(snippets)
+                    local gen_loader = snippets.gen_loader
+                    snippets.setup({
+                        snippets = {
+                            -- Load custom file with global snippets first (adjust for Windows)
+                            gen_loader.from_file('~/.config/nvim/snippets/global.json'),
+
+                            -- Load snippets based on current language by reading files from
+                            -- "snippets/" subdirectories from 'runtimepath' directories.
+                            gen_loader.from_lang(),
+                        },
+                    })
+                end,
+            },
             ["mini.hipatterns"] = {
                 startup = true,
                 setup = function(hipatterns)
@@ -87,6 +113,12 @@ require("autopack").setup({
         spec = "https://github.com/ibhagwan/fzf-lua", 
         dependencies = { "nvim-web-devicons", },
         commands = { "FzfLua", },
+        setup = {
+            fullscreen = true,
+            grep = {
+                bin = "rg", -- force ripgrep
+            },
+        },
     },
 
 	-- { spec = "https://github.com/avifenesh/claucode.nvim", },
@@ -104,7 +136,7 @@ require("autopack").setup({
 
     {
         name = "tcomment_vim",
-        keys = { "gc", "<c-_>" },
+        maps = { "gc", "<c-_>" },
     },
 
     {
@@ -114,13 +146,13 @@ require("autopack").setup({
 
     {
         name = "tinykeymap_vim",
-        keys = { "<leader>m", "M", "gt", "gp", },
+        nmaps = { "<leader>m", "M", "gt", "gp", },
         commands = { "Tinykeymap", "TinykeymapsInfo", },
     },
 
     {
         name = "trag_vim",
-        keys = { "<leader>rr", "<leader>rw", "<leader>r<space>", "<leader>rf", "<leader>rq", "<leader>rl", },
+        nmaps = { "<leader>rr", "<leader>rw", "<leader>r<space>", "<leader>rf", "<leader>rq", "<leader>rl", },
         commands = { "Trag", "Tragcw", "Traglw", },
     },
 
@@ -150,8 +182,9 @@ vim.keymap.set("n", "ß", "vip:'<,'>sort i<CR>", { silent = true })
 
 
 -- call TMultiMap("ni", "map", "<m-c>", "~l", "l", "guw", "w")
-vim.keymap.set('n', '<m-c>', 'gUlw', { desc = 'Capitalize' })
-vim.keymap.set('i', '<m-c>', '<Esc>gUlwi', { desc = 'Capitalize' })
+-- vim.keymap.set('n', '<m-c>', 'gUlw', { desc = 'Capitalize' })
+vim.keymap.set('n', '<m-c>', '~w', { desc = 'Capitalize' })
+vim.keymap.set('i', '<m-c>', '<c-o>~<c-right>', { desc = 'Capitalize' })
 
 -- call TMultiMap("*I", "noremap", "<C-BS>",  "<S-C-Left><Del>")
 -- vim.keymap.set('i', '<c-bs>', '<S-C-Left><Del>', { desc = 'Save previous word' })
@@ -171,9 +204,15 @@ vim.keymap.set("i", "<C-Del>", "<C-O>dw", { silent = true, desc = "Delete word f
 -- vim.keymap.set("i", "<C-BS>", "<C-O>dw", { silent = true, desc = "Delete word forward in insert" })   
 
 -- noremap Q @q
--- call TMultiMap("ni", "noremap <silent>", "<m-w>", ":call tml#FormatParagraph('}', 'ap', 'gw')<cr>")
+vim.keymap.set("n", "Q", "@q", { silent = true, desc = "Record q" })
+
 -- call TMultiMap("ni", "noremap <silent>", "<m-q>", ":call tml#FormatParagraph('}', 'ap')<cr>")
+vim.keymap.set("n", "<m-q>", ":call tml#FormatParagraph('}', 'ap')<cr>", { silent = true, desc = "Rewrap" })
+vim.keymap.set("i", "<m-q>", "<c-o>:call tml#FormatParagraph('}', 'ap')<cr>", { silent = true, desc = "Rewrap" })
 -- call TMultiMap("v", "noremap <silent>", "<m-q>", ":'<,'>-1s/ *$/ /ge<cr>", '`<gqap')
+vim.keymap.set("v", "<m-q>", ":'<,'>-1s/ *$/ /ge<cr>", { silent = true, desc = "Rewrap" })
+
+-- call TMultiMap("ni", "noremap <silent>", "<m-w>", ":call tml#FormatParagraph('}', 'ap', 'gw')<cr>")
 -- vnoremap <Leader>q :TUnwrap<cr>
 -- call TMultiMap("ni", "map", "<m-c>", "~l", "l", "guw", "w")
 -- call TMultiMap("ni", "map", "<leader><m-c>", "m`", "b", "~l", "``")
@@ -186,20 +225,25 @@ vim.keymap.set('n', '<leader>zr', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Rece
 vim.keymap.set('n', '<leader>zb', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
 vim.keymap.set('n', '<leader>zf', '<cmd>FzfLua files<cr>', { desc = 'Fzf Files' })
 
-vim.keymap.set('n', '<M-r>', '<cmd>Tmru<cr>', { desc = 'Recent files' })
+vim.keymap.set('n', '<m-r>', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Recent Files' })
+vim.keymap.set('n', '<m-b>', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
+vim.keymap.set('n', '<leader>ff', '<cmd>FzfLua files<cr>', { desc = 'Fzf Files' })
+
+-- vim.keymap.set('n', '<M-r>', '<cmd>Tmru<cr>', { desc = 'Recent files' })
+-- vim.keymap.set('n', '<M-b>', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
+
 -- call TMultiMap("n", "noremap", "<s-m-r>",    ':Tmrusession! ')
 -- call TMultiMap("n", "noremap", "<Leader>mru",    ':Tmru<cr>')
 
-vim.keymap.set('n', '<M-b>', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
-vim.keymap.set('n', '<S-M-b>', '<cmd>TSelectBuffer!<cr>', { desc = 'Switch buffers' })
-vim.keymap.set('n', '<leader>b', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
-vim.keymap.set('n', '<leader>B', '<cmd>TSelectBuffer!<cr>', { desc = 'Switch buffers' })
+-- vim.keymap.set('n', '<S-M-b>', '<cmd>TSelectBuffer!<cr>', { desc = 'Switch buffers' })
+-- vim.keymap.set('n', '<leader>b', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
+-- vim.keymap.set('n', '<leader>B', '<cmd>TSelectBuffer!<cr>', { desc = 'Switch buffers' })
 
-vim.keymap.set('n', '<leader>ff', '<cmd>Tfiles<cr>', { desc = 'Show files' })
-vim.keymap.set('n', '<leader>f.', '<cmd>Tfiles --glob=*<cr>', { desc = 'Show files' })
-vim.keymap.set('n', '<leader>FF', '<cmd>Tfiles!<cr>', { desc = 'Show files' })
-vim.keymap.set('n', '<leader>F:', '<cmd>Tfiles! --glob=*<cr>', { desc = 'Show files' })
+-- vim.keymap.set('n', '<leader>ff', '<cmd>Tfiles<cr>', { desc = 'Show files' })
+-- vim.keymap.set('n', '<leader>f.', '<cmd>Tfiles --glob=*<cr>', { desc = 'Show files' })
+-- vim.keymap.set('n', '<leader>FF', '<cmd>Tfiles!<cr>', { desc = 'Show files' })
+-- vim.keymap.set('n', '<leader>F:', '<cmd>Tfiles! --glob=*<cr>', { desc = 'Show files' })
 
-vim.keymap.set('n', '<leader>ap', '<cmd>Autoprojectselect<cr>', { desc = 'Select project' })
-vim.keymap.set('n', '<leader>AP', '<cmd>Autoprojectselect!<cr>', { desc = 'Select project' })
+-- vim.keymap.set('n', '<leader>ap', '<cmd>Autoprojectselect<cr>', { desc = 'Select project' })
+-- vim.keymap.set('n', '<leader>AP', '<cmd>Autoprojectselect!<cr>', { desc = 'Select project' })
 

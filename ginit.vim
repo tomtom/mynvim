@@ -1,5 +1,7 @@
 "set mouse=a
 
+GuiFont Fira Code:h12
+
 "" Set Editor Font
 "if exists(':GuiFont')
 "    " Use GuiFont! to ignore font errors
@@ -16,7 +18,6 @@ if exists(':GuiAdaptiveColor')
     GuiAdaptiveColor 1
     GuiAdaptiveFont 1
     GuiRenderLigatures 1
-    "GuiFont Fire Code:h12
     
     "set winbar=%{expand('%:p')}
 
