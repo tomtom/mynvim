@@ -1,6 +1,7 @@
 00archiv/
 cache/
 cache_*/
+lua/local/
+nvim-pack-lock.json
 share/
 share_*/
-nvim-pack-lock.json

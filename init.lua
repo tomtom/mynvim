@@ -1,5 +1,7 @@
-vim.opt.rtp:prepend(vim.fn.expand("~/.vim"))
-vim.opt.rtp:append(vim.fn.expand("~/.vim/after"))
+vim.g.myhostname = vim.fn.toupper(vim.fn.hostname())
+-- require("local." .. vim.g.myhostname)
+local ok, err = pcall(require, "local." .. vim.g.myhostname)
+
 -- vim.opt.packpath = vim.opt.rtp:get()
 
 -- vim.opt.autocomplete = true
@@ -11,7 +13,6 @@ vim.opt.expandtab = true
 vim.opt.foldlevel = 4
 vim.opt.foldmethod = "marker"
 vim.opt.formatoptions:append({ r = true, w = true })
-vim.opt.guifont = "Fira Code:h12"
 vim.opt.ignorecase = true
 vim.opt.infercase = true
 vim.opt.joinspaces = false
@@ -35,7 +36,6 @@ vim.opt.wildmode="longest:full,full"
 
 vim.g.mapleader      = '#'
 vim.g.maplocalleader = '+'
-vim.g.myhostname = vim.fn.toupper(vim.fn.hostname())
 vim.g.tvimfiles = vim.fn.stdpath('config')
 vim.g.tlib_persistent = vim.g.tvimfiles .. '/share_' .. vim.g.myhostname
 vim.g.tvimcacheroot = vim.g.tvimfiles .. '/cache_' .. vim.g.myhostname
