@@ -71,6 +71,7 @@ require("autodir")
 require("autopack").setup({
 
     -- debug = true,
+    unknown = "install",
 
 	{ spec = "https://github.com/neovim/nvim-lspconfig", },
 
@@ -125,7 +126,9 @@ require("autopack").setup({
         dependencies = { "nvim-web-devicons", },
         commands = { "FzfLua", },
         setup = {
-            fullscreen = true,
+            winopts = {
+                fullscreen = true,
+            },
             grep = {
                 bin = "rg", -- force ripgrep
             },
