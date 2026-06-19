@@ -1,6 +1,6 @@
 "set mouse=a
 
-GuiFont Fira Code:h12
+"GuiFont Fira Code:h12
 
 "" Set Editor Font
 "if exists(':GuiFont')
