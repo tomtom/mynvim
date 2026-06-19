@@ -129,8 +129,15 @@ require("autopack").setup({
             winopts = {
                 fullscreen = true,
             },
+            files = {
+                -- Show hidden files and ignore .gitignore
+                -- fd_opts = "--no-ignore",
+                -- Alternative for ripgrep-based finders:
+                -- rg_opts = "--hidden --no-ignore",
+            },
             grep = {
                 bin = "rg", -- force ripgrep
+                -- rg_opts = "-u",
             },
         },
     },
@@ -239,12 +246,12 @@ vim.keymap.set('n', '<leader>zr', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Rece
 vim.keymap.set('n', '<leader>zb', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
 vim.keymap.set('n', '<leader>zf', '<cmd>FzfLua files<cr>', { desc = 'Fzf Files' })
 
-vim.keymap.set('n', '<m-r>', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Recent Files' })
-vim.keymap.set('n', '<m-b>', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
-vim.keymap.set('n', '<leader>ff', '<cmd>FzfLua files<cr>', { desc = 'Fzf Files' })
+-- vim.keymap.set('n', '<m-r>', '<cmd>FzfLua oldfiles<cr>', { desc = 'Fzf Recent Files' })
+-- vim.keymap.set('n', '<m-b>', '<cmd>FzfLua buffers<cr>', { desc = 'Fzf Buffers' })
+-- vim.keymap.set('n', '<leader>ff', '<cmd>FzfLua files<cr>', { desc = 'Fzf Files' })
 
--- vim.keymap.set('n', '<M-r>', '<cmd>Tmru<cr>', { desc = 'Recent files' })
--- vim.keymap.set('n', '<M-b>', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
+vim.keymap.set('n', '<M-r>', '<cmd>Tmru<cr>', { desc = 'Recent files' })
+vim.keymap.set('n', '<M-b>', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
 
 -- call TMultiMap("n", "noremap", "<s-m-r>",    ':Tmrusession! ')
 -- call TMultiMap("n", "noremap", "<Leader>mru",    ':Tmru<cr>')
@@ -253,10 +260,10 @@ vim.keymap.set('n', '<leader>ff', '<cmd>FzfLua files<cr>', { desc = 'Fzf Files' 
 -- vim.keymap.set('n', '<leader>b', '<cmd>TSelectBuffer<cr>', { desc = 'Switch buffers' })
 -- vim.keymap.set('n', '<leader>B', '<cmd>TSelectBuffer!<cr>', { desc = 'Switch buffers' })
 
--- vim.keymap.set('n', '<leader>ff', '<cmd>Tfiles<cr>', { desc = 'Show files' })
--- vim.keymap.set('n', '<leader>f.', '<cmd>Tfiles --glob=*<cr>', { desc = 'Show files' })
--- vim.keymap.set('n', '<leader>FF', '<cmd>Tfiles!<cr>', { desc = 'Show files' })
--- vim.keymap.set('n', '<leader>F:', '<cmd>Tfiles! --glob=*<cr>', { desc = 'Show files' })
+vim.keymap.set('n', '<leader>ff', '<cmd>Tfiles<cr>', { desc = 'Show files' })
+vim.keymap.set('n', '<leader>f.', '<cmd>Tfiles --glob=*<cr>', { desc = 'Show files' })
+vim.keymap.set('n', '<leader>FF', '<cmd>Tfiles!<cr>', { desc = 'Show files' })
+vim.keymap.set('n', '<leader>F:', '<cmd>Tfiles! --glob=*<cr>', { desc = 'Show files' })
 
 -- vim.keymap.set('n', '<leader>ap', '<cmd>Autoprojectselect<cr>', { desc = 'Select project' })
 -- vim.keymap.set('n', '<leader>AP', '<cmd>Autoprojectselect!<cr>', { desc = 'Select project' })
