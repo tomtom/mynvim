@@ -201,6 +201,8 @@ vim.keymap.set('n', '<leader><c-s>', '<cmd>wa<cr>', { desc = 'Save all' })
 vim.keymap.set("x", "ß", ":sort i<CR>", { silent = true })
 vim.keymap.set("n", "ß", "vip:'<,'>sort i<CR>", { silent = true })
 
+-- nmap <Leader>:e :e %:p:h/
+vim.keymap.set('n', '<leader>ee', ':e %:p:h/', { desc = 'Edit in dir' })
 
 -- call TMultiMap("ni", "map", "<m-c>", "~l", "l", "guw", "w")
 -- vim.keymap.set('n', '<m-c>', 'gUlw', { desc = 'Capitalize' })
