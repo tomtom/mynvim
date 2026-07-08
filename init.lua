@@ -15,17 +15,25 @@ vim.opt.foldmethod = "marker"
 vim.opt.formatoptions:append({ r = true, w = true })
 vim.opt.ignorecase = true
 vim.opt.infercase = true
+vim.opt.infercase = true
 vim.opt.joinspaces = false
+vim.opt.linebreak = true
 vim.opt.linespace = 4
 vim.opt.shiftwidth = 4
 vim.opt.shortmess:append("I")
 vim.opt.showbreak = "| "
+vim.opt.showbreak = "| "
 vim.opt.showmatch = true
 vim.opt.smartcase = true
+vim.opt.smartcase = true
+vim.opt.smarttab = true
 vim.opt.smarttab = true
 vim.opt.splitbelow = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 vim.opt.splitright = true
 vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.tagcase = "match"
 vim.opt.tags = "./tags;tags"
 vim.opt.textwidth = 72
@@ -41,6 +49,11 @@ vim.g.tlib_persistent = vim.g.tvimfiles .. '/share_' .. vim.g.myhostname
 vim.g.tvimcacheroot = vim.g.tvimfiles .. '/cache_' .. vim.g.myhostname
 vim.g.tvimcachedir = vim.g.tvimcacheroot .. '/vim/'
 vim.g.tlib_cache = vim.g.tvimcacheroot
+
+if vim.g.neovide then
+    vim.g.neovide_cursor_trail_size = 0.0
+    vim.g.neovide_cursor_animation_length = 0.0
+end
 
 local aug = vim.api.nvim_create_augroup("AutoRead", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
@@ -65,25 +78,149 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.cmd("colorscheme tmlDarkOcean")
 vim.cmd("packadd myvimrc")
 
-require("autodir")
--- require("tml")
-
 require("autopack").setup({
 
     -- debug = true,
     unknown = "install",
 
-	{ spec = "https://github.com/neovim/nvim-lspconfig", },
+    -- {
+    --     spec = { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", },
+    --     startup = true,
+    --     setup = function(ts)
+    --         local parsers = {
+    --             "bash",
+    --             "diff",
+    --             "git_config",
+    --             "git_rebase",
+    --             "gitignore",
+    --             "go",
+    --             "html",
+    --             "http",
+    --             "javascript",
+    --             "jsdoc",
+    --             "json",
+    --             "json5",
+    --             "lua",
+    --             "luadoc",
+    --             "luap",
+    --             "markdown",
+    --             "markdown_inline",
+    --             "php",
+    --             "printf",
+    --             "python",
+    --             "query",
+    --             "r",
+    --             "regex",
+    --             "ruby",
+    --             "sps",
+    --             "toml",
+    --             "tsx",
+    --             "typescript",
+    --             "vim",
+    --             "vimdoc",
+    --             "xml",
+    --             "yaml",
+    --             'rust',
+    --             -- "c",
+    --             -- "dockerfile",
+    --             -- "fish",
+    --             -- "graphql",
+    --             -- "hcl",
+    --             -- "terraform",
+    --             -- 'zig' 
+    --         }
+    --         ts.setup({
+    --             auto_install = true,
+    --             ensure_installed = parsers,
+    --             highlight = { enable = true, additional_vim_regex_highlighting = false },
+    --             indent    = { enable = true },
+    --             incremental_selection = {
+    --                 enable = true,
+    --                 keymaps = {
+    --                     init_selection    = "<CR>",
+    --                     node_incremental  = "<CR>",
+    --                     node_decremental  = "<BS>",
+    --                     scope_incremental = "<Tab>",
+    --                 },
+    --             },
+    --             -- textobjects = {
+    --             --     select = {
+    --             --         enable = true,
+    --             --         lookahead = true,
+    --             --         keymaps = {
+    --             --             ["af"] = "@function.outer",  ["if"] = "@function.inner",
+    --             --             ["ac"] = "@class.outer",     ["ic"] = "@class.inner",
+    --             --             ["aa"] = "@parameter.outer", ["ia"] = "@parameter.inner",
+    --             --             ["al"] = "@loop.outer",      ["il"] = "@loop.inner",
+    --             --             ["ai"] = "@conditional.outer",["ii"] = "@conditional.inner",
+    --             --         },
+    --             --     },
+    --             --     move = {
+    --             --         enable = true,
+    --             --         set_jumps = true, -- so <C-o>/<C-i> work across jumps
+    --             --         goto_next_start     = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
+    --             --         goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
+    --             --         goto_next_end       = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+    --             --         goto_previous_end   = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+    --             --     },
+    --             --     swap = {
+    --             --         enable = true,
+    --             --         swap_next     = { ["<leader>a"] = "@parameter.inner" },
+    --             --         swap_previous = { ["<leader>A"] = "@parameter.inner" },
+    --             --     },
+    --             -- },
+    --         })
+    --     end,
+    -- },
 
-	{ spec = "https://github.com/rafamadriz/friendly-snippets", },
+    -- {
+    --     spec = { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "master" },
+    -- },
+
+    -- {
+    --     spec = { src = "https://github.com/nvim-treesitter/nvim-treesitter-context" },
+    --     setup = function(tc)
+    --         tc.setup({
+    --             max_lines = 3,
+    --             multiline_threshold = 1,
+    --             separator = nil,
+    --         })
+    --         vim.keymap.set("n", "[x", function()
+    --             tc.go_to_context()
+    --         end, { desc = "Jump to context" })
+    --     end,
+    -- },
+
+    -- {
+    --     spec = { src = "https://github.com/windwp/nvim-ts-autotag" },
+    --     setup = true,
+    -- },
+
+    { spec = "https://github.com/neovim/nvim-lspconfig", },
+
+	{ 
+        spec = "https://github.com/rafamadriz/friendly-snippets", 
+        -- startup = true,
+    },
 
     {
         spec = { src = "https://github.com/nvim-mini/mini.nvim", version = "stable" },
         submodules = {
             ["mini.cursorword"] = { startup = true, setup = true, },
             ["mini.indentscope"] = { startup = true, setup = true, },
-            -- ["mini.pairs"] = { startup = true, setup = true, },
+            -- ["mini.icons"] = { startup = true, setup = true, },
+            ["mini.pairs"] = { startup = true, setup = true, },
             ["mini.statusline"] = { startup = true, setup = true, },
+            ["mini.tabline"] = { startup = true, setup = true,
+                setup = {
+                    show_icons = false,
+                    format = function(buf_id, label)
+                        local suffix = vim.bo[buf_id].modified and '+ ' or ''
+                        return MiniTabline.default_format(buf_id, label) .. suffix
+                    end
+                }
+                -- dependencies = { "mini.icons", },
+            },
             ["mini.snippets"] = {
                 imaps = { "<c-j>", },
                 dependencies = { "friendly-snippets", },
@@ -144,12 +281,15 @@ require("autopack").setup({
 
 	-- { spec = "https://github.com/avifenesh/claucode.nvim", },
 
-	-- R
-	{ 
-        spec = "https://github.com/R-nvim/R.nvim", 
-        patterns = { "*.R", "*.r", "*.rmd", "*.Rmd", },
-    },
+	-- -- R
+    
+	-- { 
+    --     spec = "https://github.com/R-nvim/R.nvim", 
+    --     patterns = { "*.R", "*.r", "*.rmd", "*.Rmd", },
+    -- },
 
+    -- -- tlib
+    
     {
         name = "tselectbuffer_vim",
         commands = { "TSelectBuffer" },
@@ -179,6 +319,11 @@ require("autopack").setup({
 
 })
 
+require("autodir")
+-- require("tml")
+
+vim.keymap.set('n', '<S-PageDown>', '<cmd>bnext<cr>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-PageUp>', '<cmd>bprev<cr>', { desc = 'Pref buffer' })
 
 -- Copy (visual mode)
 vim.keymap.set("v", "<C-c>", '"+y', { desc = "Copy to clipboard" })
