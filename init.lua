@@ -91,6 +91,43 @@ require("autopack").setup({
     },
 
     {
+        'nvim-treesitter/nvim-treesitter',
+        lazy = false,
+        -- startup = true,
+        build = ':TSUpdate',
+        setup = function(TS)
+            local parsers = {
+                "bash", "diff", "git_config", "git_rebase", "gitignore", "go",
+                "html", "http", "javascript", "jsdoc", "json", "json5", 
+                "lua", "luadoc", "luap", "markdown", "markdown_inline", 
+                "php", "printf", "python", "query", "r", "regex", "ruby", 
+                "toml", "tsx", "typescript", "vim", "vimdoc", "xml", "yaml",
+                -- "c",
+                -- "dockerfile",
+                -- "fish",
+                -- "graphql",
+                -- "hcl",
+                -- "terraform",
+            }
+            -- TS.setup({})
+            TS.install(parsers)
+            local group = vim.api.nvim_create_augroup("TreesitterStartForParsers", { clear = true })
+            vim.api.nvim_create_autocmd("FileType", {
+                group = group,
+                pattern = parsers,
+                callback = function(args)
+                    vim.treesitter.start(args.buf)
+                    vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+                        vim.wo[win].foldmethod = "expr"
+                        vim.wo[win].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+                    end
+                end,
+            })
+        end,
+    },
+
+    {
         spec = { src = "https://github.com/nvim-mini/mini.nvim", version = "stable" },
         submodules = {
             ["mini.cursorword"] = { startup = true, setup = true, },
