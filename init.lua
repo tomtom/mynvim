@@ -82,6 +82,7 @@ require("autopack").setup({
 
     -- debug = true,
     unknown = "install",
+    ft = true,
 
     { spec = "https://github.com/neovim/nvim-lspconfig", },
 
@@ -133,8 +134,23 @@ require("autopack").setup({
             ["mini.cursorword"] = { startup = true, setup = true, },
             ["mini.indentscope"] = { startup = true, setup = true, },
             -- ["mini.icons"] = { startup = true, setup = true, },
-            ["mini.pairs"] = { startup = true, setup = true, },
             ["mini.statusline"] = { startup = true, setup = true, },
+            ["mini.pairs"] = { startup = true, setup = true, 
+                setup = {
+                    mappings = {
+                        ["'"] = {
+                            action = "open",
+                            pair = "''",
+                            neigh_pattern = "[^%w][^%w]",
+                        },
+                        ['"'] = {
+                            action = "open",
+                            pair = '""',
+                            neigh_pattern = "[^%w][^%w]",
+                        },
+                    },
+                }
+            },
             ["mini.tabline"] = { startup = true, setup = true,
                 setup = {
                     show_icons = false,
