@@ -13,10 +13,11 @@
 "endif
 
 if exists(':GuiAdaptiveColor')
-    GuiTabline 0
-    GuiScrollBar 1
-    GuiAdaptiveColor 1
-    GuiAdaptiveFont 1
+
+    "GuiTabline 0
+    "GuiScrollBar 1
+    " GuiAdaptiveColor 1
+    " GuiAdaptiveFont 1
     GuiRenderLigatures 1
     
     "set winbar=%{expand('%:p')}
@@ -26,5 +27,6 @@ if exists(':GuiAdaptiveColor')
     inoremap <silent><RightMouse> <Esc>:call GuiShowContextMenu()<CR>
     xnoremap <silent><RightMouse> :call GuiShowContextMenu()<CR>gv
     snoremap <silent><RightMouse> <C-G>:call GuiShowContextMenu()<CR>gv
+
 endif
 
