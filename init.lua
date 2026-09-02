@@ -91,51 +91,65 @@ require("autopack").setup({
         -- startup = true,
     },
 
-    {
-        'nvim-treesitter/nvim-treesitter',
-        lazy = false,
-        -- startup = true,
-        build = ':TSUpdate',
-        setup = function(TS)
-            local parsers = {
-                "bash", "diff", "git_config", "git_rebase", "gitignore", "go",
-                "html", "http", "javascript", "jsdoc", "json", "json5", 
-                "lua", "luadoc", "luap", "markdown", "markdown_inline", 
-                "php", "printf", "python", "query", "r", "regex", "ruby", 
-                "toml", "tsx", "typescript", "vim", "vimdoc", "xml", "yaml",
-                -- "c",
-                -- "dockerfile",
-                -- "fish",
-                -- "graphql",
-                -- "hcl",
-                -- "terraform",
-            }
-            -- TS.setup({})
-            TS.install(parsers)
-            local group = vim.api.nvim_create_augroup("TreesitterStartForParsers", { clear = true })
-            vim.api.nvim_create_autocmd("FileType", {
-                group = group,
-                pattern = parsers,
-                callback = function(args)
-                    vim.treesitter.start(args.buf)
-                    vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-                    for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
-                        vim.wo[win].foldmethod = "expr"
-                        vim.wo[win].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                    end
-                end,
-            })
-        end,
-    },
+    -- {
+    --     'nvim-treesitter/nvim-treesitter',
+    --     lazy = false,
+    --     -- startup = true,
+    --     build = ':TSUpdate',
+    --     setup = function(TS)
+    --         local parsers = {
+    --             "bash", "diff", "git_config", "git_rebase", "gitignore", "go",
+    --             "html", "http", "javascript", "jsdoc", "json", "json5", 
+    --             "lua", "luadoc", "luap", "markdown", "markdown_inline", 
+    --             "php", "printf", "python", "query", "r", "regex", "ruby", 
+    --             "toml", "tsx", "typescript", "vim", "vimdoc", "xml", "yaml",
+    --             -- "c",
+    --             -- "dockerfile",
+    --             -- "fish",
+    --             -- "graphql",
+    --             -- "hcl",
+    --             -- "terraform",
+    --         }
+    --         -- TS.setup({})
+    --         TS.install(parsers)
+    --         local group = vim.api.nvim_create_augroup("TreesitterStartForParsers", { clear = true })
+    --         vim.api.nvim_create_autocmd("FileType", {
+    --             group = group,
+    --             pattern = parsers,
+    --             callback = function(args)
+    --                 vim.treesitter.start(args.buf)
+    --                 vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    --                 for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+    --                     vim.wo[win].foldmethod = "expr"
+    --                     vim.wo[win].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    --                 end
+    --             end,
+    --         })
+    --     end,
+    -- },
 
     {
         spec = { src = "https://github.com/nvim-mini/mini.nvim", version = "stable" },
         submodules = {
+
+            ["mini.completion"] = { startup = true, setup = true, },
             ["mini.cursorword"] = { startup = true, setup = true, },
-            ["mini.indentscope"] = { startup = true, setup = true, },
-            -- ["mini.icons"] = { startup = true, setup = true, },
             ["mini.statusline"] = { startup = true, setup = true, },
-            ["mini.pairs"] = { startup = true, setup = true, 
+            ["mini.surround"] = { startup = true, setup = true, },
+
+            ["mini.indentscope"] = { startup = true,
+                setup = {
+                    options = { try_as_border = true },
+                },
+            },
+
+            ["mini.icons"] = { startup = true, 
+                setup = function(icons)
+                    icons.mock_nvim_web_devicons()
+                end, 
+            },
+
+            ["mini.pairs"] = { startup = true,
                 setup = {
                     mappings = {
                         ["'"] = {
@@ -151,7 +165,8 @@ require("autopack").setup({
                     },
                 }
             },
-            ["mini.tabline"] = { startup = true, setup = true,
+
+            ["mini.tabline"] = { startup = true,
                 setup = {
                     show_icons = false,
                     format = function(buf_id, label)
@@ -161,6 +176,7 @@ require("autopack").setup({
                 }
                 -- dependencies = { "mini.icons", },
             },
+
             ["mini.snippets"] = {
                 imaps = { "<c-j>", },
                 dependencies = { "friendly-snippets", },
@@ -170,7 +186,6 @@ require("autopack").setup({
                         snippets = {
                             -- Load custom file with global snippets first (adjust for Windows)
                             gen_loader.from_file('~/.config/nvim/snippets/global.json'),
-
                             -- Load snippets based on current language by reading files from
                             -- "snippets/" subdirectories from 'runtimepath' directories.
                             gen_loader.from_lang(),
@@ -178,6 +193,7 @@ require("autopack").setup({
                     })
                 end,
             },
+
             ["mini.hipatterns"] = {
                 startup = true,
                 setup = function(hipatterns)
